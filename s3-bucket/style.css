@@ -1,0 +1,53 @@
+.game {
+  vertical-align: top;
+}
+
+.meld {
+  margin-right: 10px;
+}
+
+.card {
+  cursor: pointer;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 8px;
+  margin: 2px;
+}
+
+.card.disabled {
+  border-width: 1px;
+  cursor: default;
+}
+
+.red {
+  color: red;
+}
+
+.red.disabled {
+  color: hsl(0, 100%, 70%);
+}
+
+.blue {
+  color: blue;
+}
+
+.blue.disabled {
+  color: hsl(240, 100%, 70%);
+}
+
+.black {
+  color: black;
+}
+
+.black.disabled {
+  color: hsl(0, 0%, 30%);
+}
+
+.gray {
+  color: lightGray;
+}
+
+.last-draw {
+  border-width: 4px;
+  border-color: green;
+}
