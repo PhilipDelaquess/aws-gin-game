@@ -3,8 +3,8 @@ import dynamo
 
 def lambda_handler (event, context):
     playerId = event['pathParameters']['id']
-    table = dynamo.getTable()
-    player = dynamo.getItem(table, playerId)
+    table = dynamo.get_table()
+    player = dynamo.get_item(table, playerId)
     return {
         "isBase64Encoded": False,
         "statusCode": 200,

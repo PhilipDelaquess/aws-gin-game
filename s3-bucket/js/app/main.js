@@ -8,6 +8,8 @@ define(function (require) {
     Score = require('app/score'),
     Game = require('app/game');
 
+  var gatewayUrl = 'https://z668d08agd.execute-api.us-east-2.amazonaws.com/prod/';
+
   var Main = React.createClass({
     getInitialState: function () {
       return {
@@ -33,8 +35,7 @@ define(function (require) {
         return;
       }
       //var statusUrl = '/api/gin-server/';
-      var statusUrl = 'https://41j6orkh98.execute-api.us-east-2.amazonaws.com/prod/';
-      $.getJSON(statusUrl + this.state.player.id)
+      $.getJSON(gatewayUrl + this.state.player.id)
       .done(function (data) {
         this.setState({player: data});
       }.bind(this))
@@ -47,7 +48,7 @@ define(function (require) {
     userLoggedIn: function (name) {
       $.ajax({
         type: 'POST',
-        url: 'https://41j6orkh98.execute-api.us-east-2.amazonaws.com/prod/new-player',
+        url: gatewayUrl + 'new-player',
         contentType: 'text/plain',
         data: name
       }).done(function (data) {
@@ -63,7 +64,7 @@ define(function (require) {
       }
       $.ajax({
         type: 'POST',
-        url: 'https://41j6orkh98.execute-api.us-east-2.amazonaws.com/prod/action',
+        url: gatewayUrl + 'action',
         contentType: 'application/json',
         data: JSON.stringify(command)
       }).done(function (data) {

@@ -1,17 +1,17 @@
 import boto3
 import decimal
 
-def getTable ():
-    return boto3.resource('dynamodb').Table('philip-delaquess-gin-game')
+def get_table ():
+    return boto3.resource('dynamodb').Table('_DYNAMO_TABLE_')
 
-def _replaceDecimals (obj):
+def _replace_decimals (obj):
     if isinstance(obj, list):
         for i in range(len(obj)):
-            obj[i] = _replaceDecimals(obj[i])
+            obj[i] = _replace_decimals(obj[i])
         return obj
     elif isinstance(obj, dict):
         for k in obj.keys():
-            obj[k] = _replaceDecimals(obj[k])
+            obj[k] = _replace_decimals(obj[k])
         return obj
     elif isinstance(obj, decimal.Decimal):
         if obj % 1 == 0:
@@ -21,13 +21,13 @@ def _replaceDecimals (obj):
     else:
         return obj
 
-def getItem (table, id, failIfMissing=True):
+def get_item (table, id, failIfMissing=True):
     response = table.get_item(Key={'id': id}, ConsistentRead=True)
     if failIfMissing or 'Item' in response:
         # might throw KeyError
-        return _replaceDecimals(response['Item'])
+        return _replace_decimals(response['Item'])
     else:
         return None
 
-def putItem (table, item):
+def put_item (table, item):
     table.put_item(Item=item)

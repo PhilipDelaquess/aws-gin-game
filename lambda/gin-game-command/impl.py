@@ -33,23 +33,23 @@ def drawDiscard (table, player, opponent, game, card):
     player['topDiscard'] = top
     opponent['topDiscard'] = top
     setStates(player, 'DISCARD_OR_KNOCK', opponent, 'AWAITING_OPPONENT_ACTION')
-    dynamo.putItem(table, player)
-    dynamo.putItem(table, opponent)
-    dynamo.putItem(table, game)
+    dynamo.put_item(table, player)
+    dynamo.put_item(table, opponent)
+    dynamo.put_item(table, game)
     return player
 
 def poneReject (table, player, opponent, game, card):
     setStates(player, 'AWAITING_OPPONENT_ACTION', opponent, 'DEALER_INITIAL_DRAW')
-    dynamo.putItem(table, player)
-    dynamo.putItem(table, opponent)
+    dynamo.put_item(table, player)
+    dynamo.put_item(table, opponent)
     return player
 
 def dealerReject (table, player, opponent, game, card):
     takeFromPack(opponent, player, game)
     setStates(player, 'AWAITING_OPPONENT_ACTION', opponent, 'DISCARD_OR_KNOCK')
-    dynamo.putItem(table, player)
-    dynamo.putItem(table, opponent)
-    dynamo.putItem(table, game)
+    dynamo.put_item(table, player)
+    dynamo.put_item(table, opponent)
+    dynamo.put_item(table, game)
     return player
 
 def discard (table, player, opponent, game, card):
@@ -61,9 +61,9 @@ def discard (table, player, opponent, game, card):
     player['topDiscard'] = card
     opponent['topDiscard'] = card
     setStates(player, 'AWAITING_OPPONENT_ACTION', opponent, 'NORMAL_DRAW')
-    dynamo.putItem(table, player)
-    dynamo.putItem(table, opponent)
-    dynamo.putItem(table, game)
+    dynamo.put_item(table, player)
+    dynamo.put_item(table, opponent)
+    dynamo.put_item(table, game)
     return player
 
 def knock (table, player, opponent, game, card):
@@ -106,16 +106,16 @@ def knock (table, player, opponent, game, card):
     opponent['opponentScore'] += playerScore
 
     setStates(player, 'ACKNOWLEDGE_DEAL', opponent, 'ACKNOWLEDGE_DEAL')
-    dynamo.putItem(table, player)
-    dynamo.putItem(table, opponent)
+    dynamo.put_item(table, player)
+    dynamo.put_item(table, opponent)
     return player
 
 def drawPack (table, player, opponent, game, card):
     takeFromPack(player, opponent, game)
     setStates(player, 'DISCARD_OR_KNOCK', opponent, 'AWAITING_OPPONENT_ACTION')
-    dynamo.putItem(table, player)
-    dynamo.putItem(table, opponent)
-    dynamo.putItem(table, game)
+    dynamo.put_item(table, player)
+    dynamo.put_item(table, opponent)
+    dynamo.put_item(table, game)
     return player
 
 def acknowledge (table, player, opponent, game, card):
@@ -144,9 +144,9 @@ _dispatcher = {
 }
 
 def performCommand (playerId, command, card):
-    table = dynamo.getTable()
-    player = dynamo.getItem(table, playerId)
-    opponent = dynamo.getItem(table, player['opponentId'])
-    game = dynamo.getItem(table, player['gameId'])
+    table = dynamo.get_table()
+    player = dynamo.get_item(table, playerId)
+    opponent = dynamo.get_item(table, player['opponentId'])
+    game = dynamo.get_item(table, player['gameId'])
 
     return _dispatcher[player['state']][command](table, player, opponent, game, card)

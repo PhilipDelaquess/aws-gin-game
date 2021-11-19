@@ -4,13 +4,13 @@ import dynamo
 
 def makePlayerWaitForOpponent (table, player):
     player['state'] = 'AWAITING_OPPONENT_ARRIVAL'
-    dynamo.putItem(table, player)
+    dynamo.put_item(table, player)
 
     pendingGame = {
         'id': 'PendingGame',
         'playerId': player['id']
     }
-    dynamo.putItem(table, pendingGame)
+    dynamo.put_item(table, pendingGame)
 
 def startGameWithPlayer (table, pendingGame, player):
     deck = card.shuffledDeck()
@@ -26,7 +26,7 @@ def startGameWithPlayer (table, pendingGame, player):
         'discard': [topCard]
     }
 
-    opponent = dynamo.getItem(table, pendingGame['playerId'])
+    opponent = dynamo.get_item(table, pendingGame['playerId'])
     opponent['gameId'] = gameId
     opponent['state'] = 'AWAITING_OPPONENT_ACTION'
     opponent['score'] = 0
@@ -55,9 +55,9 @@ def startGameWithPlayer (table, pendingGame, player):
     player['opponentState'] = 'AWAITING_OPPONENT_ACTION'
     player['opponentScore'] = 0
 
-    dynamo.putItem(table, player)
-    dynamo.putItem(table, opponent)
-    dynamo.putItem(table, game)
+    dynamo.put_item(table, player)
+    dynamo.put_item(table, opponent)
+    dynamo.put_item(table, game)
     table.delete_item(Key={'id': 'PendingGame'})
 
 def createNewPlayer (playerName):
@@ -67,8 +67,8 @@ def createNewPlayer (playerName):
         'name': playerName
     }
 
-    table = dynamo.getTable()
-    pendingGame = dynamo.getItem(table, 'PendingGame', failIfMissing=False)
+    table = dynamo.get_table()
+    pendingGame = dynamo.get_item(table, 'PendingGame', failIfMissing=False)
     if pendingGame == None:
         makePlayerWaitForOpponent(table, player)
     else:

@@ -60,3 +60,26 @@ post a string to new-player, use boto3 to create a Player#uuid item in philip-de
 arn:aws:iam::353269244577:role/lambda-apigateway-role
 
 https://41j6orkh98.execute-api.us-east-2.amazonaws.com/prod/
+
+An API method embodies a method request and a method response
+method request is a verb plus a resource, with headers, path and query parameters, payload
+method response has status code, headers, body
+
+An API Integration also has a request and a response
+request involves transforming the data and calling the back-end (eg lambda)
+requires IAM role, the ARN of the Lambda function
+response is not applicable to proxy integrations
+
+Lambda Proxy integration
+	integration's HTTP method is POST
+	its URI is the ARN of the lambda
+	give API Gateway permission to call lambda
+
+API Gateway passes the entire request object directly to the lambda handler
+Access-Control-Allow-Origin: * among the response headers for CORS
+
+CORS
+Implement an OPTIONS method that returns
+	Access-Control-Allow-Methods
+	Access-Control-Allow-Headers
+	Access-Control-Allow-Origin
