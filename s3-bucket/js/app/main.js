@@ -4,11 +4,10 @@ define(function (require) {
     _ = require('underscore'),
     React = require('react'),
     ReactDOM = require('reactDOM'),
+    gatewayUrl = require('app/aws').gatewayUrl,
     Login = require('app/login'),
     Score = require('app/score'),
     Game = require('app/game');
-
-  var gatewayUrl = 'https://z668d08agd.execute-api.us-east-2.amazonaws.com/prod/';
 
   var Main = React.createClass({
     getInitialState: function () {

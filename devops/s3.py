@@ -4,9 +4,11 @@
 import boto3
 import os
 
+import config
+
 s3 = boto3.client('s3')
 
-bucket_name = 'devops-philip-delaquess-gin-game'
+bucket_name = config.prefix + 'philip-delaquess-gin-game'
 
 s3.create_bucket(
     Bucket=bucket_name,
@@ -54,6 +56,11 @@ s3.put_bucket_policy(
     Policy=policy
 )
 
+api_client = boto3.client('apigateway')
+api_name = config.prefix + config.api_gateway['name']
+api_id = [x['id'] for x in api_client.get_rest_apis()['items'] if x['name'] == api_name][0]
+print('Will inject api ID = ' + api_id)
+
 def upload_objects (prefix, path):
     "Recursive function to traverse a directory tree and upload files to S3"
     for entry in os.scandir(path):
@@ -68,7 +75,21 @@ def upload_objects (prefix, path):
             elif entry.name.endswith('.css'):
                 # otherwise the stylesheet doesn't work
                 extra_args['ContentType'] = 'text/css'
-            s3.upload_file(filename, bucket_name, key, ExtraArgs=extra_args)
+            if entry.name == 'aws.js':
+                js_file = open(filename, 'r')
+                js_output = js_file.read()
+                js_file.close()
+                js_output = js_output.replace('_STAGE_', config.api_gateway['stage'])
+                js_output = js_output.replace('_API_ID_', api_id)
+
+                temp_filename = 'temp_aws.js'
+                temp_file = open(temp_filename, 'w')
+                temp_file.write(js_output)
+                temp_file.close()
+                s3.upload_file(temp_filename, bucket_name, key, ExtraArgs=extra_args)
+                os.remove(temp_filename)
+            else:
+                s3.upload_file(filename, bucket_name, key, ExtraArgs=extra_args)
         elif entry.is_dir():
             upload_objects(prefix + entry.name + '/', path + '/' + entry.name)
 
