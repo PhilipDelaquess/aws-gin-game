@@ -94,5 +94,3 @@ def upload_objects (prefix, path):
             upload_objects(prefix + entry.name + '/', path + '/' + entry.name)
 
 upload_objects('', '../s3-bucket')
-# Note: It's not quite that simple. The static web site has $.ajax URLs that contain the
-# id of the API Gateway. We need to create the API first and then template its ID into the JS code.
