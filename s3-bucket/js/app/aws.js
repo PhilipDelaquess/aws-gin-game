@@ -8,4 +8,4 @@ define(function (require) {
   	gatewayUrl: 'https://' + apiId + '.execute-api.us-east-2.amazonaws.com/' + stage + '/'
   };
 
-)};
+});
